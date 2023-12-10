@@ -14,9 +14,10 @@ public class Main {
     private static List<String> rows = new ArrayList<>();
 
     public static void main(String[] args) throws URISyntaxException {
-        String input = loadInput("input2.txt");
+        String input = loadInput("input.txt");
         rows = splitIntoRows(input);
-        day1();
+        // day1();
+        day2();
     }
 
     private static void day1() {
@@ -37,6 +38,39 @@ public class Main {
             }
         }
         System.out.println("Total worth: " + totalWorth);
+    }
+
+    private static void day2() {
+        int[] scratchcardMatches = new int[rows.size()];
+        for (int i = 0; i < rows.size(); i++) {
+            List<Integer> winningNumbers = getWinningNumbers(rows.get(i));
+            List<Integer> personalNumbers = getPersonalNumbers(rows.get(i));
+            List<Integer> matches = getMatches(winningNumbers, personalNumbers);
+            if (!matches.isEmpty()) {
+                scratchcardMatches[i] = matches.size();
+            }
+            System.out.println(winningNumbers + " X " + personalNumbers + " -> " + matches + " (" + matches.size() + ")"); // Debug
+        }
+        int[] multipliers = new int[rows.size()];
+        Arrays.fill(multipliers, 1);
+        for (int i = 0; i < scratchcardMatches.length; i++) {
+            int multiplier = scratchcardMatches[i];
+            for (int j = multipliers[i]; j > 0; j--) {
+                for (int k = i + 1; k <= i + multiplier; k++) {
+                    if (k <= multipliers.length) {
+                        multipliers[k] += 1;
+                    } else {
+                        break;
+                    }
+                }
+            }
+            System.out.println(multiplier + " x " + multipliers[i]);
+        }
+        int totalScratchcards = 0;
+        for (int multiplier : multipliers) {
+            totalScratchcards += multiplier;
+        }
+        System.out.println("Total scratchcards: " + totalScratchcards);
     }
 
     private static List<Integer> getMatches(List<Integer> winningNumbers, List<Integer> personalNumbers) {
