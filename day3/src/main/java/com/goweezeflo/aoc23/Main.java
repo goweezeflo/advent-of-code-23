@@ -20,7 +20,7 @@ public class Main {
     private static int nextRow = 1;
     private static boolean hasPreviousRow = false;
     private static boolean hasNextRow = true;
-    private static final Pattern partSymbolPattern = Pattern.compile("[^.0-9]");
+    private static final Pattern partSymbolPattern = Pattern.compile("\\*");
     private static final Pattern partNumberPattern = Pattern.compile("[0-9]");
 
     public static void main(String[] args) {
@@ -101,8 +101,9 @@ public class Main {
                 if (hasNextRow) {
                     allNumbers.addAll(getRowNumbers(nextRow, i));
                 }
-                for (int number : allNumbers) {
-                    frameSum += number;
+                if (allNumbers.size() == 2) {
+                    int gearRatio = allNumbers.get(0) * allNumbers.get(1);
+                    frameSum += gearRatio;
                 }
             }
         }
